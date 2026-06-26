@@ -7,7 +7,7 @@
 
 ## Objetivo
 
-Convertir una historia sucia de 4 commits de desarrollo (WIPs, fixes, typos) en 1 commit limpio y atómico, listo para un MR. Esto es lo que harás antes de cada PR en el mundo real.
+Convertir una historia sucia de 4 commits de desarrollo (WIPs, fixes, typos) en 1 commit limpio y atómico, listo para un PR. Esto es lo que harás antes de cada PR en el mundo real.
 
 ---
 
@@ -24,7 +24,7 @@ echo "v4" >> feat.js && git add . && git commit -m "Add feature"
 git log --oneline
 ```
 
-Verás 4 commits: exactamente el tipo de historia que no querrías que nadie vea en un MR.
+Verás 4 commits: exactamente el tipo de historia que no querrías que nadie vea en un PR.
 
 ### 2. Lanza el rebase interactivo
 
@@ -48,15 +48,25 @@ pick jkl012 Add feature
 Cambia el archivo para que quede así:
 
 ```
-pick jkl012 Add feature
-fixup ghi789 almost done
+pick abc123 WIP
 fixup def456 fix typo
-drop abc123 WIP
+fixup ghi789 almost done
+fixup jkl012 Add feature
 ```
+
+Mantenemos el orden original y usamos `fixup` para juntar todos los commits en uno, usando el mensaje del primero como base. Luego lo renombramos en el paso siguiente.
 
 Guarda y cierra el editor (`Esc` → `:wq` en vim, o cierra la pestaña en VS Code).
 
-### 4. Comprueba el resultado
+### 4. Renombra el commit resultante
+
+Ahora tienes un solo commit con el mensaje "WIP", que no es muy descriptivo. Corrígelo con:
+
+```bash
+git commit --amend -m "Add feature"
+```
+
+### 5. Comprueba el resultado
 
 ```bash
 git log --oneline
@@ -74,7 +84,7 @@ Un solo commit limpio: `Add feature`. 🎉
 | `reword` | Mantiene el commit pero abre el editor para cambiar el mensaje |
 | `squash` | Junta con el commit anterior y abre el editor para editar el mensaje combinado |
 | `fixup` | Junta con el anterior y descarta el mensaje (el más cómodo para limpiar) |
-| `drop` | Elimina el commit completamente |
+| `drop` | Elimina el commit completamente — cuidado si ese commit crea archivos que usan los siguientes |
 | `exec` | Ejecuta un comando de shell entre commits |
 
 ---
